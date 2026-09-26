@@ -1,8 +1,16 @@
-import { formatInTimeZone, toZonedTime } from "date-fns-tz";
-import { differenceInCalendarDays, parseISO, addDays, format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
+import {
+  differenceInCalendarDays,
+  parseISO,
+  addDays,
+  format,
+} from "date-fns";
 
-export const APP_TIMEZONE = process.env.APP_TIMEZONE || "Asia/Kolkata";
-export const TARGET_EXAM_DATE = process.env.TARGET_EXAM_DATE || "2027-02-25";
+export const APP_TIMEZONE =
+  process.env.APP_TIMEZONE || "Asia/Kolkata";
+
+export const TARGET_EXAM_DATE =
+  process.env.TARGET_EXAM_DATE || "2027-02-25";
 
 /**
  * "Today" as calculated server-side, in the app's configured timezone.
@@ -29,18 +37,30 @@ export function getDaysRemaining(): number {
 }
 
 export function isTargetReached(): boolean {
-  return getDaysRemaining() <= 0 && differenceInCalendarDays(getTargetDate(), getTodayDate()) < 0;
+  return (
+    getDaysRemaining() <= 0 &&
+    differenceInCalendarDays(getTargetDate(), getTodayDate()) < 0
+  );
 }
 
-/** All calendar dates from today through the target date (inclusive), as yyyy-MM-dd strings. */
+/**
+ * All calendar dates from today through the target date (inclusive),
+ * as yyyy-MM-dd strings.
+ */
 export function getDateRangeToTarget(): string[] {
   const today = getTodayDate();
   const target = getTargetDate();
-  const totalDays = Math.max(differenceInCalendarDays(target, today), 0);
+  const totalDays = Math.max(
+    differenceInCalendarDays(target, today),
+    0
+  );
+
   const dates: string[] = [];
+
   for (let i = 0; i <= totalDays; i++) {
     dates.push(format(addDays(today, i), "yyyy-MM-dd"));
   }
+
   return dates;
 }
 
@@ -49,5 +69,12 @@ export function dateKeyToDate(dateKey: string): Date {
 }
 
 export function formatDisplayDate(dateKey: string): string {
-  return format(parseISO(dateKey), "MMMM d, yyyy");
+  const date = parseISO(dateKey);
+
+  // Prevent the dashboard from crashing if an invalid date is received.
+  if (Number.isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+
+  return format(date, "MMMM d, yyyy");
 }
