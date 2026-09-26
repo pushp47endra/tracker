@@ -32,10 +32,10 @@ export default async function DashboardPage() {
           <h1 className="text-xl font-semibold">GATE AI</h1>
           <p className="text-sm text-[var(--muted)]">
             GATE CSE 2027 &middot; Target Date: {formatDisplayDate(
-              data.targetDate
+  data.targetDate && !Number.isNaN(new Date(data.targetDate).getTime())
     ? new Date(data.targetDate).toISOString().slice(0, 10)
     : "2027-02-25"
-            )}
+)}
           </p>
           <p className="text-sm text-[var(--muted)]">Today: {formatDisplayDate(data.todayKey)}</p>
         </div>
