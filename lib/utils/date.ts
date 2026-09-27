@@ -10,7 +10,7 @@ export const APP_TIMEZONE =
   process.env.APP_TIMEZONE || "Asia/Kolkata";
 
 export const TARGET_EXAM_DATE =
-  process.env.TARGET_EXAM_DATE || "2027-02-25";
+  process.env.TARGET_EXAM_DATE || "2027-02-07";
 
 /**
  * "Today" as calculated server-side, in the app's configured timezone.
@@ -25,7 +25,13 @@ export function getTodayDate(): Date {
 }
 
 export function getTargetDate(): Date {
-  return parseISO(TARGET_EXAM_DATE);
+  const date = parseISO(TARGET_EXAM_DATE);
+
+  if (Number.isNaN(date.getTime())) {
+    return parseISO("2027-02-25");
+  }
+
+  return date;
 }
 
 /** Days remaining until the target exam date. Never negative. */
