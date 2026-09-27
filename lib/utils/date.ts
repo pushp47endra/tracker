@@ -28,7 +28,7 @@ export function getTargetDate(): Date {
   const date = parseISO(TARGET_EXAM_DATE);
 
   if (Number.isNaN(date.getTime())) {
-    return parseISO("2027-02-25");
+    return parseISO("2027-02-07");
   }
 
   return date;
