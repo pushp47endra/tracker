@@ -36,10 +36,22 @@ export function getTargetDate(): Date {
 
 /** Days remaining until the target exam date. Never negative. */
 export function getDaysRemaining(): number {
-  const today = getTodayDate();
-  const target = getTargetDate();
-  const diff = differenceInCalendarDays(target, today);
-  return Math.max(diff, 0);
+  const todayKey = getTodayKey();
+
+  const [todayYear, todayMonth, todayDay] = todayKey
+    .split("-")
+    .map(Number);
+
+  const [targetYear, targetMonth, targetDay] = TARGET_EXAM_DATE
+    .split("-")
+    .map(Number);
+
+  const todayUTC = Date.UTC(todayYear, todayMonth - 1, todayDay);
+  const targetUTC = Date.UTC(targetYear, targetMonth - 1, targetDay);
+
+  const diff = Math.round((targetUTC - todayUTC) / 86400000);
+
+  return Number.isFinite(diff) ? Math.max(diff, 0) : 0;
 }
 
 export function isTargetReached(): boolean {
