@@ -1,6 +1,12 @@
 import "server-only";
 import { prisma } from "@/lib/db/prisma";
-import { getTodayDate, getTodayKey, getDaysRemaining, getTargetDate } from "@/lib/utils/date";
+import {
+  getTodayDate,
+  getTodayKey,
+  getDaysRemaining,
+  getTargetDate,
+  TARGET_EXAM_DATE,
+} from "@/lib/utils/date";
 import { subDays, format } from "date-fns";
 
 export async function getDashboardData(userId: string) {
@@ -105,7 +111,7 @@ export async function getDashboardData(userId: string) {
 
   return {
     daysRemaining: getDaysRemaining(),
-    targetDate: getTargetDate().toISOString(),
+    targetDate: TARGET_EXAM_DATE,
     todayKey,
     todayTasks,
     tasksDoneToday,
